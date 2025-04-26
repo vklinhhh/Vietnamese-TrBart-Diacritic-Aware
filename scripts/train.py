@@ -142,7 +142,7 @@ def main():
             if 'train' not in hf_dataset: raise ValueError("Dataset must have a 'train' split.")
             # Use full dataset for estimation, split later
             full_train_dataset = hf_dataset['train']
-            dataset_dict = full_train_dataset.select(range(20)).train_test_split(test_size=args.val_split, seed=42)
+            dataset_dict = full_train_dataset.train_test_split(test_size=args.val_split, seed=42)
             train_hf_split = dataset_dict['train']
             val_hf_split = dataset_dict['test']
         else:
