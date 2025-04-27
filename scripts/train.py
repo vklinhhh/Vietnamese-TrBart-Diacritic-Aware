@@ -70,18 +70,18 @@ def main():
     args = parser.parse_args()
 
     # --- Setup Multiprocessing and Device ---
-    if args.num_workers > 0:
-        try:
-            current_method = mp.get_start_method(allow_none=True)
-            if current_method != 'spawn':
-                logger.info(f"Setting multiprocessing start method to 'spawn' (currently {current_method})")
-                mp.set_start_method('spawn', force=True)
-            else:
-                 logger.info("Multiprocessing start method already set to 'spawn'.")
-        except Exception as e:
-            logger.warning(f"Error setting multiprocessing start method: {e}. Using default: {mp.get_start_method()}. If CUDA errors occur, try setting num_workers=0.")
-    else:
-         logger.info("num_workers set to 0, multiprocessing disabled.")
+    # if args.num_workers > 0:
+    #     try:
+    #         current_method = mp.get_start_method(allow_none=True)
+    #         if current_method != 'spawn':
+    #             logger.info(f"Setting multiprocessing start method to 'spawn' (currently {current_method})")
+    #             mp.set_start_method('spawn', force=True)
+    #         else:
+    #              logger.info("Multiprocessing start method already set to 'spawn'.")
+    #     except Exception as e:
+    #         logger.warning(f"Error setting multiprocessing start method: {e}. Using default: {mp.get_start_method()}. If CUDA errors occur, try setting num_workers=0.")
+    # else:
+    #      logger.info("num_workers set to 0, multiprocessing disabled.")
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     logger.info(f"Selected device: {device}")
@@ -141,7 +141,7 @@ def main():
             logger.warning(f"Dataset {args.dataset_name} missing 'train' or 'validation' split. Attempting to split 'train'.")
             if 'train' not in hf_dataset: raise ValueError("Dataset must have a 'train' split.")
             # Use full dataset for estimation, split later
-            full_train_dataset = hf_dataset['train']
+            full_train_dataset = hf_dataset['train'].select(range(0, len(hf_dataset['train']), 2))
             dataset_dict = full_train_dataset.train_test_split(test_size=args.val_split, seed=42)
             train_hf_split = dataset_dict['train']
             val_hf_split = dataset_dict['test']

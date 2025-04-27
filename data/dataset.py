@@ -171,6 +171,8 @@ class ImprovedBartPhoDataset(Dataset):
         
         diacritic_indices = []
         for diac in diacritics:
+            if (diac == 'none') or (diac == None):
+                diac = 'no_diacritic'
             try:
                 index = self.diacritic_vocab.index(diac)
             except ValueError:

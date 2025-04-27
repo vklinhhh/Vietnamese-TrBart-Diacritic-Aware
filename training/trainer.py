@@ -175,10 +175,10 @@ def train_bartpho_model_with_curriculum(
                 try:
                     # Move Batch to Device
                     try:
-                        pixel_values = batch['pixel_values'].to(device, non_blocking=True)
-                        labels = batch['labels'].to(device, non_blocking=True)
-                        base_char_indices = batch['base_character_indices'].to(device, non_blocking=True)
-                        diacritic_indices = batch['diacritic_indices'].to(device, non_blocking=True)
+                        pixel_values = batch['pixel_values'].to(device)
+                        labels = batch['labels'].to(device)
+                        base_char_indices = batch['base_character_indices'].to(device)
+                        diacritic_indices = batch['diacritic_indices'].to(device)
                     except Exception as move_e:
                         logger.error(f"Error moving batch {step} to device: {move_e}", exc_info=False)
                         logger.warning(f"Skipping batch {step}.")
